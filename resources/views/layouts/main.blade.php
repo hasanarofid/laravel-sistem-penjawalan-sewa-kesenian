@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     
-  <title>@yield('title')</title>
+  <title>SIM penjadwalan dan penyewaan jasa kesenian </title>
 
   @stack('before-style')
   @include('includes.main.style')
