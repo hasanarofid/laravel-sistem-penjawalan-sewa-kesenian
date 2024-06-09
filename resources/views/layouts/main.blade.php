@@ -46,7 +46,7 @@
             </section>
           </div>    
 
-          @include('includes.main.footer')
+          {{-- @include('includes.main.footer') --}}
       </div>
     </div>
   </div>
