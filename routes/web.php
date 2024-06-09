@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -10,7 +11,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingListController;
-
+use App\Http\Controllers\Admin\KesenianController;
 use App\Http\Controllers\ChangePassController;
 
 // use Illuminate\Support\Facades\Mail;
@@ -90,6 +91,9 @@ Route::prefix('admin')
         Route::get('/room/json', [RoomController::class, 'json'])
         ->name('room.json');
 
+        Route::get('/kesenian/json', [KesenianController::class, 'json'])
+        ->name('kesenian.json');
+
         Route::get('/booking-list/json', [BookingListController::class, 'json'])
         ->name('booking-list.json');
 
@@ -102,6 +106,7 @@ Route::prefix('admin')
         Route::resources([
             'user'          => UserController::class,
             'room'          => RoomController::class,
+            'kesenian'          => KesenianController::class,
         ]);
     });
 

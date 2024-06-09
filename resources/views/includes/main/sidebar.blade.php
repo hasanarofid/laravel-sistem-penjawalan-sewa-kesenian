@@ -41,9 +41,14 @@
         <li><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
         <li class="menu-header">DATA MASTER</li>
-        <li class="{{ request()->is('admin/room*') ? 'active' : '' }}">
+        {{-- <li class="{{ request()->is('admin/room*') ? 'active' : '' }}">
           <a class="nav-link" href="{{ route('room.index') }}">
             <i class="fas fa-door-open"></i> <span>Ruangan</span>
+          </a>
+        </li> --}}
+        <li class="{{ request()->is('admin/kesenian*') ? 'active' : '' }}">
+          <a class="nav-link" href="{{ route('kesenian.index') }}">
+            <i class="fas fa-door-open"></i> <span>Kesenian</span>
           </a>
         </li>
         <li class="{{ request()->is('admin/user*') ? 'active' : '' }}">
