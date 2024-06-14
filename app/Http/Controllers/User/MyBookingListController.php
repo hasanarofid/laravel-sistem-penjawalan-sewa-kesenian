@@ -42,7 +42,12 @@ class MyBookingListController extends Controller
      */
     public function index()
     {
-        return view('pages.user.my-booking-list.index');
+        $model =  BookingList::where('user_id', Auth::user()->id)->with([
+            'kesenian'
+        ])->get();
+        return view('pages.user.my-booking-list.index',
+        compact('model')
+    );
     }
 
     /**

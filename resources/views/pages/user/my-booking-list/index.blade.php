@@ -32,10 +32,10 @@
         <th>Kesenian</th>
         <th>Tanggal</th>
         <th>Alamat</th>
-        
         <th>Status</th> 
       </tr>
     @endslot
+   
       
   @endcomponent
 
@@ -46,6 +46,7 @@
 
   <script>
   $(document).ready(function() {
+    
 
     $('#my-booking-list-table').DataTable({
       processing: true,
