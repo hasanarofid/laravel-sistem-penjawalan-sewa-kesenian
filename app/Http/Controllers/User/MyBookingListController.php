@@ -16,16 +16,20 @@ use App\Models\User;
 use App\Jobs\SendEmail;
 
 use App\Http\Requests\User\MyBookingListRequest;
-
+use App\Models\BarangkesenianM;
 use DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class MyBookingListController extends Controller
 {
     public function json(){
         $data = BookingList::where('user_id', Auth::user()->id)->with([
-            'room'
+            'kesenian'
         ]);
-
+        // dd($data->get());
+        // foreach($data->get() as $dat ){
+        //     dd($dat->kesenian->foto);
+        // } 
         return DataTables::of($data)
         ->addIndexColumn()
         ->make(true);
@@ -49,9 +53,11 @@ class MyBookingListController extends Controller
     public function create()
     {
         $rooms = Room::orderBy('name')->get();
+        $kesenian = BarangkesenianM::orderBy('nama')->get();
 
         return view('pages.user.my-booking-list.create', [
             'rooms' => $rooms,
+            'kesenians' => $kesenian,
         ]);
     }
 
@@ -61,39 +67,45 @@ class MyBookingListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MyBookingListRequest $request)
+    // public function store(MyBookingListRequest $request)
+    public function store(Request $request)
     {
+        
+
         $data               = $request->all();
+
         $data['user_id']    = Auth::user()->id;
         $data['status']     = 'PENDING';
 
-        $room               = Room::select('name')->where('id', $data['room_id'])->firstOrFail();
+        $room               = BarangkesenianM::select('nama')->where('id', $data['kesenian_id'])->firstOrFail();
 
         if(
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['room_id', '=', $data['room_id']],
+                ['barangkesenian_id', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])
-            ->whereBetween('start_time', [$data['start_time'], $data['end_time']])
             ->count() <= 0 || 
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['room_id', '=', $data['room_id']],
+                ['barangkesenian_id', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])
-            ->whereBetween('end_time', [$data['start_time'], $data['end_time']])
             ->count() <= 0 ||
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['room_id', '=', $data['room_id']],
-                ['start_time', '<=', $data['start_time']],
-                ['end_time', '>=', $data['end_time']],
+                ['barangkesenian_id', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])->count() <= 0
         ) {
-            if(BookingList::create($data)) {
-                $request->session()->flash('alert-success', 'Booking ruang '.$room->name.' berhasil ditambahkan');
+            $model = new BookingList();
+            $model->barangkesenian_id =  $data['kesenian_id'];
+            $model->date =  $data['date'];
+            $model->alamat =  $data['purpose'];
+            $model->user_id = Auth::user()->id;
+            $model->status =  'PENDING';
+            if($model->save()) {
+                $request->session()->flash('alert-success', 'Kesenian '.$room->nama.' berhasil ditambahkan');
                 
                 $user_name          = $this->getUserName();
                 $user_email         = $this->getUserEmail();
@@ -106,12 +118,12 @@ class MyBookingListController extends Controller
                 // use URL::to('/') for the url value
 
                 // URL::to('/my-booking-list)
-                dispatch(new SendEmail($user_email, $user_name, $room->name, $data['date'], $data['start_time'], $data['end_time'], $data['purpose'], $to_role, $user_name, 'https://google.com', $status));
+                // dispatch(new SendEmail($user_email, $user_name, $room->name, $data['date'], $data['start_time'], $data['end_time'], $data['purpose'], $to_role, $user_name, 'https://google.com', $status));
 
-                $to_role    = 'ADMIN';
+                // $to_role    = 'ADMIN';
 
-                // URL::to('/admin/booking-list)
-                dispatch(new SendEmail($admin->email, $user_name, $room->name, $data['date'], $data['start_time'], $data['end_time'], $data['purpose'], $to_role, $admin->name, 'https://google.com', $status));
+                // // URL::to('/admin/booking-list)
+                // dispatch(new SendEmail($admin->email, $user_name, $room->name, $data['date'], $data['start_time'], $data['end_time'], $data['purpose'], $to_role, $admin->name, 'https://google.com', $status));
 
             } else {
                 $request->session()->flash('alert-failed', 'Booking ruang '.$room->name.' gagal ditambahkan');
@@ -137,7 +149,7 @@ class MyBookingListController extends Controller
         $item           = BookingList::findOrFail($id);
         $data['status'] = 'BATAL';
 
-        $room               = Room::select('name')->where('id', $item->room_id)->firstOrFail();
+        $room               = Room::select('name')->where('id', $item->kesenian_id)->firstOrFail();
 
         if($item->update($data)) {
             session()->flash('alert-success', 'Booking Ruang '.$room->name.' berhasil dibatalkan');

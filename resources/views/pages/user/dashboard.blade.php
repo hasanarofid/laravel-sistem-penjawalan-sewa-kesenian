@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Dashboard - ROOMING')
+@section('title', 'Dashboard - Sanggar Seni Putra Karuhun')
 
 @section('header-title', 'Dashboard')
 

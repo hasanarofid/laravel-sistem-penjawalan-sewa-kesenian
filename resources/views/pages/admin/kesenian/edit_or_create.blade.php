@@ -83,54 +83,57 @@
       @endcomponent
 
       @component('components.input-field')
-          @slot('input_label', 'Deskripsi')
-          @slot('input_type', 'text')
-          @slot('input_name', 'deskripsi')
-          @isset($item->deskripsi)
-            @slot('input_value')
-              {{ $item->deskripsi }}
-            @endslot 
-          @endisset
-          @isset($item)
-            @slot('other_attributes', 'autofocus')
-          @endisset
-      @endcomponent
-
-      @component('components.input-field')
-      @slot('input_label', 'Jenis')
-      @slot('input_type', 'text')
-      @slot('input_name', 'jenis')
-      @isset($item->jenis)
-        @slot('input_value')
-          {{ $item->jenis }}
-        @endslot 
+      @slot('input_label', 'Paket Sewa')
+      @slot('input_type', 'textarea')
+      @slot('input_name', 'paket')
+      @isset($item->paket)
+          @slot('input_value')
+              {{ $item->paket }}
+          @endslot 
       @endisset
       @isset($item)
-        @slot('other_attributes', 'autofocus')
+          @slot('other_attributes', 'autofocus')
       @endisset
-  @endcomponent
-
-      @component('components.input-field')
-          @slot('input_label', 'Harga Sewa')
-          @slot('input_type', 'number')
-          @slot('input_name', 'hargasewa')
-          @isset($item->hargasewa)
-            @slot('input_value')
-              {{ $item->hargasewa }}
-            @endslot 
-          @endisset
       @endcomponent
 
-      @component('components.input-field')
-      @slot('input_label', 'Stok')
-      @slot('input_type', 'number')
-      @slot('input_name', 'stok')
-      @isset($item->stok)
+  @component('components.input-field')
+  @slot('input_label', 'Harga')
+  @slot('input_type', 'number')
+  @slot('input_name', 'harga')
+  @isset($item->harga)
+    @slot('input_value')
+      {{ $item->harga }}
+    @endslot 
+  @endisset
+@endcomponent
+
+@component('components.input-field')
+@slot('input_label', 'Anggota')
+@slot('input_type', 'text')
+@slot('input_name', 'anggota')
+@isset($item->anggota)
+  @slot('input_value')
+    {{ $item->anggota }}
+  @endslot 
+@endisset
+@isset($item)
+  @slot('other_attributes', 'autofocus')
+@endisset
+@endcomponent
+@component('components.input-field')
+    @slot('input_label', 'Deskripsi')
+    @slot('input_type', 'textarea')
+    @slot('input_name', 'deskripsi')
+    @isset($item->deskripsi)
         @slot('input_value')
-          {{ $item->stok }}
+            {{ $item->deskripsi }}
         @endslot 
-      @endisset
-  @endcomponent
+    @endisset
+    @isset($item)
+        @slot('other_attributes', 'autofocus')
+    @endisset
+@endcomponent
+
 
       @component('components.input-field')
           @slot('input_label', 'Foto')

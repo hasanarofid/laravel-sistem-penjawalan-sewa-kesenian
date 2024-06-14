@@ -1,18 +1,18 @@
 @extends('layouts.main')
 
-@section('title', 'Data Ruangan - Sanggar Seni Putra Karuhun')
+@section('title', 'Data Kesenian - Sanggar Seni Putra Karuhun')
 
-@section('header-title', 'Data Ruangan')
+@section('header-title', 'Data Kesenian')
     
 @section('breadcrumbs')
-  <div class="breadcrumb-item"><a href="#">Ruangan</a></div>
-  <div class="breadcrumb-item active">Data Ruangan</div>
+  <div class="breadcrumb-item"><a href="#">Kesenian</a></div>
+  <div class="breadcrumb-item active">Data Kesenian</div>
 @endsection
 
-@section('section-title', 'Ruangan')
+@section('section-title', 'Kesenian')
     
 @section('section-lead')
-  Berikut ini adalah daftar seluruh ruangan.
+  Berikut ini adalah daftar seluruh kesenian.
 @endsection
 
 @section('content')
@@ -26,9 +26,11 @@
         <th>#</th>
         <th>Foto</th>
         <th>Nama</th>
+        <th>Paket</th>
+        <th>Harga</th>
+        <th>Anggota</th>
         <th>Deskripsi</th>
-        <th>Kapasitas</th>
-      </tr>
+      </tr> 
     @endslot
       
   @endcomponent
@@ -42,7 +44,7 @@
     $('#room-table').DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('room-list.json') }}',
+      ajax: '{{ route('kesenian-list.json') }}',
       order: [2, 'asc'],
       columns: [
       {
@@ -52,8 +54,8 @@
         searchable: false
       },
       {
-        name: 'photo',
-        data: 'photo',
+        name: 'foto',
+        data: 'foto',
         orderable: false, 
         searchable: false,
         render: function ( data, type, row ) {
@@ -69,16 +71,24 @@
         }
       },
       {
-        name: 'name',
-        data: 'name',
+        name: 'nama',
+        data: 'nama',
       },
       {
-        name: 'description',
-        data: 'description',
+        name: 'paket',
+        data: 'paket',
       },
       {
-        name: 'capacity',
-        data: 'capacity',
+        name: 'anggota',
+        data: 'anggota',
+      },
+      {
+        name: 'harga',
+        data: 'harga',
+      },
+      {
+        name: 'deskripsi',
+        data: 'deskripsi',
       },
     ],
     });

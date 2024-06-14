@@ -65,6 +65,18 @@ class KesenianController extends Controller
         return redirect()->route('kesenian.index');
     }
 
+    public function list(){
+        return view('pages.user.kesenian.index');
+    }
+
+    public function dataJson(){
+        $data = BarangkesenianM::all();
+
+        return DataTables::of($data)
+        ->addIndexColumn()
+        ->make(true);
+    }
+
     /**
      * Display the specified resource.
      *

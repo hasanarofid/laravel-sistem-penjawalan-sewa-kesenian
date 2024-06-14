@@ -5,7 +5,7 @@
 @section('content')
 <style>
   body {
-    background: url('/kesenian.jpg') no-repeat center center fixed;
+    background: url('/kesenian2.jpeg') no-repeat center center fixed;
     background-size: cover;
 }
 

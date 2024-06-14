@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'My Booking List - ROOMING')
+@section('title', 'My Booking List - Sanggar Seni Putra Karuhun')
 
 @section('header-title', 'My Booking List')
     
@@ -29,11 +29,10 @@
       <tr>
         <th>#</th>
         <th>Foto</th>
-        <th>Ruangan</th>
+        <th>Kesenian</th>
         <th>Tanggal</th>
-        <th>Waktu Mulai</th>
-        <th>Waktu Selesai</th>
-        <th>Keperluan</th> 
+        <th>Alamat</th>
+        
         <th>Status</th> 
       </tr>
     @endslot
@@ -75,8 +74,8 @@
         searchable: false,
       },
       {
-        name: 'room.photo',
-        data: 'room.photo',
+        // name: 'kesenian.foto',
+        data: 'kesenian.foto',
         orderable: false, 
         searchable: false,
         render: function ( data, type, row ) {
@@ -92,8 +91,8 @@
         }
       },
       {
-        name: 'room.name',
-        data: 'room.name',
+        // name: 'kesenian.nama',
+        data: 'kesenian.nama',
         render: function ( data, type, row ) {
           var result = data;
 
@@ -125,17 +124,10 @@
         name: 'date',
         data: 'date',
       },
+     
       {
-        name: 'start_time',
-        data: 'start_time',
-      },
-      {
-        name: 'end_time',
-        data: 'end_time',
-      },
-      {
-        name: 'purpose',
-        data: 'purpose',
+        name: 'alamat',
+        data: 'alamat',
       },
       {
         name: 'status',

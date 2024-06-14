@@ -1,10 +1,10 @@
 <div class="main-sidebar">
   <aside id="sidebar-wrapper">
-    <div class="sidebar-brand">
-      <a href="index.html">SIM Penjadwalan</a>
+    <div class="sidebar-brand" style="font-size: 10px !important">
+      <a href="{{ url('/') }}">Sanggar Seni Putra Karuhun</a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-      <a href="index.html">RM</a>
+      <a href="{{ url('/') }}">RM</a>
     </div>
     <ul class="sidebar-menu">
       @if (Auth::user()->role == 'USER')
@@ -12,10 +12,10 @@
         <li class="menu-header">Dashboard</li>
         <li><a class="nav-link" href="{{ route('user.dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
 
-        <li class="menu-header">RUANGAN</li>
-        <li class="{{ request()->is('room*') ? 'active' : '' }}">
-          <a class="nav-link" href="{{ route('room-list.index') }}">
-            <i class="fas fa-door-open"></i> <span>List Ruangan</span>
+        <li class="menu-header">Kesenian</li>
+        <li class="{{ request()->is('list-kesenian*') ? 'active' : '' }}">
+          <a class="nav-link" href="{{ route('list-kesenian.index') }}">
+            <i class="fas fa-door-open"></i> <span>List Kesenian</span>
           </a>
         </li>
 

@@ -55,6 +55,14 @@ Route::prefix('/')
         Route::get('/room', [RoomListController::class, 'index'])
         ->name('room-list.index');
 
+        Route::get('/list-kesenian', [KesenianController::class, 'list'])
+        ->name('list-kesenian.index');
+
+
+        Route::get('/list-kesenian/json', [KesenianController::class, 'dataJson'])
+        ->name('kesenian-list.json');
+
+
         Route::get('/my-booking-list/json', [MyBookingListController::class, 'json'])
         ->name('my-booking-list.json');
         Route::get('/my-booking-list', [MyBookingListController::class, 'index'])

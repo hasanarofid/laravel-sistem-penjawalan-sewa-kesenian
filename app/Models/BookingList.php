@@ -16,12 +16,11 @@ class BookingList extends Model
      * @var array
      */
     protected $fillable = [
-        'room_id',
+        'barangkesenian_id',
         'user_id',
         'date',
-        'start_time',
-        'end_time',
-        'purpose',
+        'alamat',
+        'bukti_pembayaran',
         'status'
     ];
 
@@ -34,8 +33,8 @@ class BookingList extends Model
         
     ];
 
-    public function room(){
-        return $this->hasOne(Room::class, 'id', 'room_id');
+    public function kesenian(){
+        return $this->hasOne(BarangkesenianM::class, 'id', 'barangkesenian_id');
     }
 
     public function user(){

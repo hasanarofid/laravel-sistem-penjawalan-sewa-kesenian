@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Data Kesenian - ROOMING')
+@section('title', 'Data Kesenian - Sanggar Seni Putra Karuhun')
 
 @section('header-title', 'Data Kesenian')
     
@@ -30,10 +30,10 @@
         <th>#</th>
         <th>Foto</th>
         <th>Nama</th>
-        <th>Jenis</th>
+        <th>Paket</th>
+        <th>Harga</th>
+        <th>Anggota</th>
         <th>Deskripsi</th>
-        <th>Harga Sewa</th>
-        <th>Stok</th>
       </tr>
     @endslot
       
@@ -107,20 +107,20 @@
         }
       },
       {
-        name: 'jenis',
-        data: 'jenis',
+        name: 'paket',
+        data: 'paket',
       },
       {
-        name: 'hargasewa',
-        data: 'hargasewa',
+        name: 'anggota',
+        data: 'anggota',
+      },
+      {
+        name: 'harga',
+        data: 'harga',
       },
       {
         name: 'deskripsi',
         data: 'deskripsi',
-      },
-      {
-        name: 'stok',
-        data: 'stok',
       },
     ],
     });

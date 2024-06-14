@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-  Buat Booking - ROOMING
+  Buat Booking - Sanggar Seni Putra Karuhun
 @endsection 
 
 @section('header-title')
@@ -36,17 +36,17 @@
     @slot('input_form')
 
       @component('components.input-field')
-          @slot('input_label', 'Nama Ruangan')
+          @slot('input_label', 'Nama Kesenian')
           @slot('input_type', 'select')
           @slot('select_content')
-            <option value="">Pilih Ruangan</option>
-            @foreach ($rooms as $room)
-            <option value="{{ $room->id }}"
-                {{ old('room_id') == $room->id ? 'selected' : '' }}>
-                {{ $room->name }}</option>
+            <option value="">Pilih Kesenian</option>
+            @foreach ($kesenians as $kesenian)
+            <option value="{{ $kesenian->id }}"
+                {{ old('kesenian_id') == $kesenian->id ? 'selected' : '' }}>
+                {{ $kesenian->nama }} - Rp. {{ number_format($kesenian->harga) }} ( {{ $kesenian->anggota }} ) </option>
             @endforeach
           @endslot
-          @slot('input_name', 'room_id')
+          @slot('input_name', 'kesenian_id')
           @slot('form_group_class', 'required')
           @slot('other_attributes', 'required autofocus')
       @endcomponent
@@ -55,43 +55,23 @@
           @slot('input_label', 'Tanggal Booking')
           @slot('input_type', 'text')
           @slot('input_name', 'date')
-          @slot('input_classes', 'datepicker')
+          @slot('input_classes', 'form-control datepicker ' . ($errors->has('date') ? 'is-invalid' : ''))
           @slot('form_group_class', 'required')
           @slot('other_attributes', 'required')
+          <div class="invalid-feedback">
+              @error('date') {{ $message }} @else {{ 'Tanggal booking harus diisi.' }} @enderror
+          </div>
       @endcomponent
 
       @component('components.input-field')
-          @slot('form_row', 'open')
-          @slot('col', 'col-md-6')
-          @slot('input_label', 'Waktu Mulai')
-          @slot('input_type', 'text')
-          @slot('input_id', 'start_time')
-          @slot('input_name', 'start_time')
-          @slot('placeholder', 'HH:mm')
-          @slot('input_classes', 'timepicker')
-          @slot('form_group_class', 'col required')
-          @slot('other_attributes', 'required')
-      @endcomponent
-
-      @component('components.input-field')
-          @slot('form_row', 'close')
-          @slot('col', 'col-md-6')
-          @slot('input_label', 'Waktu Selesai')
-          @slot('input_type', 'text')
-          @slot('input_id', 'end_time')
-          @slot('input_name', 'end_time')
-          @slot('placeholder', 'HH:mm')
-          @slot('input_classes', 'timepicker')
-          @slot('form_group_class', 'col required')
-          @slot('other_attributes', 'required')
-      @endcomponent
-
-      @component('components.input-field')
-          @slot('input_label', 'Keperluan')
+          @slot('input_label', 'Alamat')
           @slot('input_type', 'text')
           @slot('input_name', 'purpose')
           @slot('form_group_class', 'required')
           @slot('other_attributes', 'required')
+          <div class="invalid-feedback">
+              @error('purpose') {{ $message }} @else {{ 'Alamat harus diisi.' }} @enderror
+          </div>
       @endcomponent
 
     @endslot
@@ -107,16 +87,29 @@
 @endsection
 
 @push('after-style')
-  {{-- datepicker  --}}
+  {{-- Datepicker --}}
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  {{-- datepicker  --}}
 @endpush
 
 @push('after-script')
-  {{-- datepicker  --}}
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-  {{-- datepicker  --}}
+  {{-- Datepicker --}}
+  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script>
+    $(function() {
+        $('.datepicker').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            minDate: moment().add(2, 'days'), // Minimum date 2 days from today
+            locale: {
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Clear',
+                daysOfWeek: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+                monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+            }
+        });
+    });
+  </script>
 @endpush
 
 @include('includes.notification')

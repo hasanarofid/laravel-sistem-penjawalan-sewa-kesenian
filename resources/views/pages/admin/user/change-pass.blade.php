@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-  Ganti Password User - ROOMING
+  Ganti Password User - Sanggar Seni Putra Karuhun
 @endsection 
 
 @section('header-title')

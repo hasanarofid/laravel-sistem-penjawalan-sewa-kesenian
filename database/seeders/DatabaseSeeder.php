@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             RoomSeeder::class,
-            MigrateSeedeToBarangkesenianMSeeder::class
+            // MigrateSeedeToBarangkesenianMSeeder::class
         ]);
     }
 }

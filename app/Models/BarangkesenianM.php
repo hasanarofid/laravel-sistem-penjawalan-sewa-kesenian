@@ -11,12 +11,12 @@ class BarangkesenianM extends Model
 
     public $table = 'barangkesenian_m';
     protected $fillable = [
-        'nama',
-        'jenis',
-        'hargasewa',
-        'deskripsi',
-        'stok',
         'foto',
+        'nama',
+        'paket',
+        'anggota',
+        'harga',
+        'deskripsi',
     ];
 
 }

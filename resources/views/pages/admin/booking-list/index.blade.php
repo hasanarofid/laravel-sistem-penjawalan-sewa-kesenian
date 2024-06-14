@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Booking List - ROOMING')
+@section('title', 'Booking List - Sanggar Seni Putra Karuhun')
 
 @section('header-title', 'Booking List')
     

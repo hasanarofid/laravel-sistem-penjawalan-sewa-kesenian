@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-Tambah Data User - ROOMING
+Tambah Data User - Sanggar Seni Putra Karuhun
 @endsection 
 
 @section('header-title')

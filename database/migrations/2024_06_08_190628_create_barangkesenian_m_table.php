@@ -17,10 +17,10 @@ class CreateBarangkesenianMTable extends Migration
             $table->id();
             $table->string('foto')->nullable();
             $table->string('nama');
-            $table->string('jenis');
-            $table->integer('hargasewa');
+            $table->text('paket');
+            $table->string('anggota');
+            $table->integer('harga');
             $table->text('deskripsi');
-            $table->integer('stok');
             $table->timestamps();
         });
     }
