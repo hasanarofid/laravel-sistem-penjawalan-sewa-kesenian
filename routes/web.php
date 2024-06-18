@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -26,11 +27,12 @@ use App\Http\Controllers\ChangePassController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Route::get('/', [FrontendController::class, 'index'])->name('home');
 Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
 Route::prefix('/')
-    ->get('/', [UserDashboardController::class, 'index'])
+    // ->get('/', [UserDashboardController::class, 'index'])
+    ->get('/', [FrontendController::class, 'index'])
     /* 
     |--------------------------------------------------------------------------
     | Which Home Middleware
@@ -42,8 +44,9 @@ Route::prefix('/')
     | the role is admin then first go to '/' which is user's dashboard and then 
     | redirect to '/admin' or admin's dashboard.
     */
-    ->middleware(['auth', 'which.home'])
-    ->name('user.dashboard');
+    // ->middleware(['auth', 'which.home'])
+    // ->name('user.dashboard');
+    ->name('home');
 
 Route::prefix('/')
     ->middleware(['auth', 'is.user'])

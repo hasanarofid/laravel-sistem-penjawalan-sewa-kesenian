@@ -30,6 +30,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+        dd(1);
         $today = Carbon::today()->toDateString();
 
         $booking_today      = BookingList::where('user_id', Auth::user()->id)
