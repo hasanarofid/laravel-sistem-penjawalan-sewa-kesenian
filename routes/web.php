@@ -28,11 +28,11 @@ use App\Http\Controllers\ChangePassController;
 |
 */
 // Route::get('/', [FrontendController::class, 'index'])->name('home');
-Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
+Auth::routes(['register' => true, 'reset' => false, 'verify' => false]);
 
 Route::prefix('/')
-    // ->get('/', [UserDashboardController::class, 'index'])
     ->get('/', [FrontendController::class, 'index'])
+    // ->get('/', [FrontendController::class, 'index'])
     /* 
     |--------------------------------------------------------------------------
     | Which Home Middleware
@@ -44,9 +44,9 @@ Route::prefix('/')
     | the role is admin then first go to '/' which is user's dashboard and then 
     | redirect to '/admin' or admin's dashboard.
     */
-    // ->middleware(['auth', 'which.home'])
-    // ->name('user.dashboard');
-    ->name('home');
+    ->middleware(['auth', 'which.home'])
+    ->name('user.dashboard');
+    // ->name('home');
 
 Route::prefix('/')
     ->middleware(['auth', 'is.user'])

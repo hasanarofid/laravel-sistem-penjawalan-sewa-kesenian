@@ -9,6 +9,8 @@
   @stack('before-style')
   @include('includes.frontend.style')
   @stack('after-style')
+
+  
 </head>
 
 
@@ -89,7 +91,7 @@
             </div>
         </div>
 
-        <div class="countDOwn_area">
+        <div class="countDOwn_area d-none">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-xl-4 col-md-6 col-lg-4">
@@ -115,37 +117,72 @@
     </div>
     <!-- slider_area_end -->
 
-    <!-- about_area_start -->
-    <div class="about_area" style="display: none" >
-        <div class="shape-1 d-none d-xl-block">
-            <img src="{{ asset('sanggar/img/about/shap1.png') }}" alt="">
-        </div>
-        <div class="shape-2 d-none d-xl-block">
-            <img src="{{ asset('sanggar/img/about/shap2.png') }}" alt="">
-        </div>
+    <div class="about_area">
+        {{-- <div class="shape-1 d-none d-xl-block">
+            <img src="{{ asset('sanggar/img/sanggar/sanggar-utama.jpeg') }}" alt="">
+        </div> --}}
+        {{-- <div class="shape-2 d-none d-xl-block">
+            <img src="{{ asset('sanggar/img/sanggar/sanggar-utama.jpeg') }}" alt="">
+        </div> --}}
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-xl-6 col-md-6">
-                    <div class="about_thumb">
-                        <img src="{{ asset('sanggar/img/about/about.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="col-xl-5 offset-xl-1 col-md-6">
-                    <div class="about_info">
-                        <div class="section_title">
-                            <span class="sub_heading">Welcome To</span>
-                            <h3>The Biggest Design <br>
-                                Conference of the <br>
-                                Year 2019</h3>
-                        </div>
-                        <p>Our set he for firmament morning sixth subdue darkness creeping gathered divide our let god.
-                            moving. Moving in fourth air night bring upon you’re it beast.</p>
-                        <a href="#" class="boxed-btn-red">Learn More</a>
+                <div class="col-xl-12 col-md-12">
+                    <div class="about_thumb" style="position: relative;">
+                        <img src="{{ asset('sanggar/img/sanggar/sanggar-utama.jpeg') }}" alt="">
+                        <a href="{{ route('login') }}" class="boxed-btn-white btn btn-primary" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            Login
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <style>
+        .event_area .container .row.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.event_area .container .row.no-gutters > [class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.about_thumb {
+    width: 100%;
+    overflow: hidden;
+}
+
+.about_thumb img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+    </style>
+    <!-- event_area_start -->
+    <div class="event_area">
+        <div class="container">
+            <div class="row align-items-center no-gutters">
+                <div class="col-xl-4 col-md-4">
+                    <div class="about_thumb">
+                        <img src="{{ asset('sanggar/img/sanggar/1.jpeg') }}" alt="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="about_thumb">
+                        <img src="{{ asset('sanggar/img/sanggar/2.jpeg') }}" alt="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="about_thumb">
+                        <img src="{{ asset('sanggar/img/sanggar/3.jpeg') }}" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- about_area_end -->
 
     <!-- speakers_start -->
@@ -352,7 +389,7 @@
     </div>
     <!-- event_area_end -->
 
-
+    
     <!-- resister_book_start -->
     <div class="resister_book resister_bg_1" >
         <div class="container">
