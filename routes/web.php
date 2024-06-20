@@ -44,10 +44,11 @@ Route::prefix('/')
     | the role is admin then first go to '/' which is user's dashboard and then 
     | redirect to '/admin' or admin's dashboard.
     */
-    ->middleware(['auth', 'which.home'])
+    // ->middleware(['auth', 'which.home'])
+    // ->name('user.dashboard');
+    ->name('home');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->name('user.dashboard');
-    // ->name('home');
-
 Route::prefix('/')
     ->middleware(['auth', 'is.user'])
     ->group(function(){
@@ -129,6 +130,7 @@ Route::prefix('admin')
 
 $users = [
     '/', 'admin',
+    '/', 'user',
 ];
 
 foreach ($users as $user) {
