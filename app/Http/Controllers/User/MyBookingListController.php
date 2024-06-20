@@ -45,7 +45,7 @@ class MyBookingListController extends Controller
         $model =  BookingList::where('user_id', Auth::user()->id)->with([
             'kesenian'
         ])->get();
-        return view('pages.user.my-booking-list.index',
+        return view('pages.user.my-booking-list.index2',
         compact('model')
     );
     }

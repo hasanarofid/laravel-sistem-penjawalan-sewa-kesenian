@@ -69,6 +69,10 @@ Route::prefix('/')
 
         Route::get('/my-booking-list/json', [MyBookingListController::class, 'json'])
         ->name('my-booking-list.json');
+        Route::get('/payment/proof', [MyBookingListController::class, 'bayar'])
+        ->name('submit.payment.proof');
+
+        
         Route::get('/my-booking-list', [MyBookingListController::class, 'index'])
         ->name('my-booking-list.index');
         Route::get('/my-booking-list/create', [MyBookingListController::class, 'create'])
