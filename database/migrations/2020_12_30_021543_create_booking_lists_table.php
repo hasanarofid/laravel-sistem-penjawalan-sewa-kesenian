@@ -20,7 +20,7 @@ class CreateBookingListsTable extends Migration
             $table->date('date'); 
             $table->text('alamat');
             $table->string('bukti_pembayaran')->nullable();
-            $table->enum('status', array('PENDING', 'DISETUJUI', 'DIGUNAKAN', 'DITOLAK', 'EXPIRED', 'BATAL', 'SELESAI'))->default('PENDING');
+            $table->enum('status', array('PENDING', 'DISETUJUI', 'DIGUNAKAN', 'DITOLAK', 'EXPIRED', 'BATAL', 'SELESAI','DIBAYAR'))->default('PENDING');
             $table->softDeletes();
             $table->timestamps();
         });

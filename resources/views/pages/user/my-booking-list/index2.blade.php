@@ -16,6 +16,9 @@
 @endsection
 
 @section('content')
+
+      <a href="{{ route('my-booking-list.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Booking</a>
+  
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -34,33 +37,77 @@
         $no = 1;
     @endphp
     @foreach ($model as $item)
-        <tr>
-          <td>{{ $no++ }}</td>
-          <td>
-            <div class="gallery gallery-fw">`
-              <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">`
-                <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
-              </a>
+    <tr>
+        <td>{{ $no++ }}</td>
+        <td>
+            <div class="gallery gallery-fw">
+                <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
+                    <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
+                </a>
             </div>
-          </td>
-          <td>
-            {{ $item->kesenian->nama}}
-          </td>
-          <td>{{  $item->date }}</td>
-          <td>{{  $item->alamat }}</td>
-          <td>{{  $item->status }}</td>
-          <td>{{  $item->bukti_pembayaran }}</td>
-          <td>
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#paymentProofModal" data-id="{{ $item->id }}">Kirim Bukti</a>
-          </td>
+        </td>
+        <td>{{ $item->kesenian->nama }}</td>
+        <td>{{ $item->date }}</td>
+        <td>{{ $item->alamat }}</td>
+        <td>{{ $item->status }}</td>
+        <td>
+            @if ($item->status === 'DIBAYAR')
+                <div class="gallery gallery-fw">
+                    <a href="{{ asset('storage/'.$item->bukti_pembayaran) }}" data-toggle="lightbox">
+                        <img src="{{ asset('storage/'.$item->bukti_pembayaran) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
+                    </a>
+                </div>
+            @else
+                -
+            @endif
+        </td>
+        <td>
+            @if ($item->status !== 'DIBAYAR')
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#paymentProofModal" data-id="{{ $item->id }}">Kirim Bukti</a>
+            @else
+                <button class="btn btn-secondary" disabled>Kirim Bukti</button>
+            @endif
+        </td>
+    </tr>
+@endforeach
 
-        </tr>
-    @endforeach
   </tbody>
 </table>
 
 
 @endsection
+
+
+<div class="modal fade" id="paymentProofModal" tabindex="-1" role="dialog" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="POST" action="{{ route('submit.payment.proof') }}" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-header">
+              <h5 class="modal-title" id="paymentProofModalLabel">Kirim Bukti Pembayaran</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <input type="hidden" name="item_id" id="item-id">
+              <div class="form-group">
+                  <label for="proof">Bukti Pembayaran</label>
+                  <input type="file" class="form-control" id="proof" name="proof" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+              <button type="submit" class="btn btn-primary">Kirim</button>
+          </div>
+      </form>
+      
+      </div>
+  </div>
+</div>
+
+@push('after-script')
+<script src="//cdn.datatables.net/plug-ins/1.10.22/dataRender/ellipsis.js"></script>
 
 <script>
   $('#paymentProofModal').on('show.bs.modal', function (event) {
@@ -71,20 +118,5 @@
     });
 </script>
 
-
-
-@push('after-script')
-<script src="//cdn.datatables.net/plug-ins/1.10.22/dataRender/ellipsis.js"></script>
-
-  <script>
-
-
-</script>
-
-@include('includes.lightbox')
-
-@include('includes.notification')
-
-@include('includes.confirm-modal')
 
 @endpush

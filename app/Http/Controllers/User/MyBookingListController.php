@@ -50,6 +50,25 @@ class MyBookingListController extends Controller
     );
     }
 
+    public function bayar(Request $request){
+        // dd($request->item_id);
+        // $request->validate([
+        //     'item_id' => 'required|exists:your_table,id', // Validate that item_id exists in your table
+        //     'proof' => 'required|mimes:jpeg,png,jpg,pdf|max:2048' // Validate file type and size
+        // ]);
+
+        $filePath = $request->file('proof')->store('payment_proofs', 'public');
+
+        $model = BookingList::find($request->item_id);
+        // dd($model);
+        $model->bukti_pembayaran = $filePath;
+        $model->status = 'DIBAYAR'; // Update status to DIBAYAR
+        $model->save();
+
+        return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+    
+    }
+
     /**
      * Show the form for creating a new resource.
      *
