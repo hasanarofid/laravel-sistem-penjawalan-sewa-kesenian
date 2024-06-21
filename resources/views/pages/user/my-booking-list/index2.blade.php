@@ -90,6 +90,14 @@
               </button>
           </div>
           <div class="modal-body">
+            <div class="row mb-3 p-3" style="background-color: rgb(38, 0, 255); color: aliceblue; border-radius: 5px;">
+                <div class="col">
+                    <h5 class="text-center">NO REKENING KAMI</h5>
+                    <p class="text-center mb-0">1310017243298</p>
+                    <p class="text-center">Mandiri</p>
+                    <p class="text-center font-weight-bold">Fanisa Nur Fauzi</p>
+                </div>
+            </div>
               <input type="hidden" name="item_id" id="item-id">
               <div class="form-group">
                   <label for="proof">Bukti Pembayaran</label>
