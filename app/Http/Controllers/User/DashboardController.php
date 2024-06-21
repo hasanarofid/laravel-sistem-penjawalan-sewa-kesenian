@@ -40,9 +40,15 @@ class DashboardController extends Controller
             ['user_id', Auth::user()->id],
         ])->count();
 
+        $model = BookingList::with(['room', 'user']) // Eager load the relationships
+    ->where('user_id', Auth::user()->id) // Filter by user_id
+    ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+    ->get();
+
         return view('pages.user.dashboard', [
             'booking_today'     => $booking_today,
             'booking_lifetime'  => $booking_lifetime,
+            'model'  => $model,
         ]);
     }
 }

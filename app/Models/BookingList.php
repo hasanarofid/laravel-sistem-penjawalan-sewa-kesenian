@@ -37,6 +37,10 @@ class BookingList extends Model
         return $this->hasOne(BarangkesenianM::class, 'id', 'barangkesenian_id');
     }
 
+    public function room(){
+        return $this->hasOne(BarangkesenianM::class, 'id', 'barangkesenian_id');
+    }
+
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }

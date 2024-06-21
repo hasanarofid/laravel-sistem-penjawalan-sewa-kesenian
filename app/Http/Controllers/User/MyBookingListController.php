@@ -44,7 +44,9 @@ class MyBookingListController extends Controller
     {
         $model =  BookingList::where('user_id', Auth::user()->id)->with([
             'kesenian'
-        ])->get();
+        ])
+        ->orderBy('created_at', 'desc')
+        ->get();
         return view('pages.user.my-booking-list.index2',
         compact('model')
     );

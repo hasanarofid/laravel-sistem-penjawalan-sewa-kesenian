@@ -112,6 +112,9 @@ Route::prefix('admin')
         Route::get('/booking-list/json', [BookingListController::class, 'json'])
         ->name('booking-list.json');
 
+        Route::post('/booking-list/konfirmasi', [BookingListController::class, 'konfirmasi'])
+        ->name('submit.konfirmasi');
+
         Route::get('/booking-list', [BookingListController::class, 'index'])
         ->name('booking-list.index');
 

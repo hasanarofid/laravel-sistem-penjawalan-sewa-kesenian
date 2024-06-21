@@ -32,132 +32,115 @@
   
 </div>
 
-@component('components.datatables')
-    
-  @slot('table_id', 'dashboard-booking-list-table')
-
-  @slot('card_header', 'true')
-  @slot('card_header_content')
     <h4>
       Booking hari ini
     </h4>
     <small>
       Diambil dari 3 data teratas.
     </small>
-  @endslot
 
-  @slot('buttons')
+
     <a href="{{ route('my-booking-list.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Booking</a>
-  @endslot
-
-  @slot('table_header')
-    <tr>
-      <th>#</th>
-      <th>Foto</th>
-      <th>Ruangan</th>
-      <th>Tanggal</th>
-      <th>Waktu Mulai</th>
-      <th>Waktu Selesai</th>
-      <th>Keperluan</th>
-      <th>Status</th>
-    </tr>
-  @endslot
+  
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Foto</th>
+          <th>Kesenian</th>
+          <th>Tanggal</th>
+          <th>Alamat</th>
+          <th>Status</th> 
+          <th>Bukti Pembayaran</th> 
+          <th>Action</th> 
+        </tr>
+      </thead>
+      <tbody>
+        @php
+            $no = 1;
+        @endphp
+        @foreach ($model as $item)
+        <tr>
+            <td>{{ $no++ }}</td>
+            <td>
+                <div class="gallery gallery-fw">
+                    <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
+                        <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
+                    </a>
+                </div>
+            </td>
+            <td>{{ $item->kesenian->nama }}</td>
+            <td>{{ $item->date }}</td>
+            <td>{{ $item->alamat }}</td>
+            <td>{{ $item->status }}</td>
+            <td>
+                @if ($item->status === 'DIBAYAR')
+                    <div class="gallery gallery-fw">
+                        <a href="{{ asset('storage/'.$item->bukti_pembayaran) }}" data-toggle="lightbox">
+                            <img src="{{ asset('storage/'.$item->bukti_pembayaran) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
+                        </a>
+                    </div>
+                @else
+                    -
+                @endif
+            </td>
+            <td>
+                @if ($item->status !== 'DIBAYAR')
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#paymentProofModal" data-id="{{ $item->id }}">Kirim Bukti</a>
+                @else
+                    <button class="btn btn-secondary" disabled>Kirim Bukti</button>
+                @endif
+            </td>
+        </tr>
+    @endforeach
     
-@endcomponent
+      </tbody>
+    </table>
+    
 
 @endsection
 
+
+
+<div class="modal fade" id="paymentProofModal" tabindex="-1" role="dialog" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="POST" action="{{ route('submit.payment.proof') }}" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-header">
+              <h5 class="modal-title" id="paymentProofModalLabel">Kirim Bukti Pembayaran</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <input type="hidden" name="item_id" id="item-id">
+              <div class="form-group">
+                  <label for="proof">Bukti Pembayaran</label>
+                  <input type="file" class="form-control" id="proof" name="proof" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+              <button type="submit" class="btn btn-primary">Kirim</button>
+          </div>
+      </form>
+      
+      </div>
+  </div>
+</div>
+
 @push('after-script')
+<script src="//cdn.datatables.net/plug-ins/1.10.22/dataRender/ellipsis.js"></script>
 
-  <script>
-  $(document).ready(function() {
-    $('#dashboard-booking-list-table').DataTable({
-      processing: true,
-      ajax: '{{ route('dashboard.booking-list') }}',
-      order: [2, 'asc'],
-      columns: [
-      {
-        name: 'DT_RowIndex',
-        data: 'DT_RowIndex',
-        orderable: false, 
-        searchable: false
-      },
-      {
-        name: 'room.photo',
-        data: 'room.photo',
-        orderable: false, 
-        searchable: false,
-        render: function ( data, type, row ) {
-          if(data != null) {
-            return `<div class="gallery gallery-fw">`
-              + `<a href="{{ asset('storage/${data}') }}" data-toggle="lightbox">`
-                + `<img src="{{ asset('storage/${data}') }}" class="img-fluid" style="min-width: 100px; height: auto;">`
-              + `</a>`
-            + '</div>';
-          } else {
-            return '-'
-          }
-        }
-      },
-      {
-        name: 'room.name',
-        data: 'room.name',
-      },
-      {
-        name: 'date',
-        data: 'date',
-      },
-      {
-        name: 'start_time',
-        data: 'start_time',
-      },
-      {
-        name: 'end_time',
-        data: 'end_time',
-      },
-      {
-        name: 'purpose',
-        data: 'purpose',
-      },
-      {
-        name: 'status',
-        data: 'status',
-        render: function ( data, type, row ) {
-          var result = `<span class="badge badge-`;
-
-          if(data === 'PENDING') 
-            result += `info`;
-          else if(data === 'DISETUJUI')
-            result += `primary`;
-          else if(data === 'DIGUNAKAN')
-            result += `primary`;
-          else if(data === 'DITOLAK')
-            result += `danger`;
-          else if(data === 'EXPIRED')
-            result += `warning`;
-          else if(data === 'BATAL')
-            result += `warning`;
-          else if(data === 'SELESAI')
-            result += `success`;
-
-          result += `">${data}</span>`;
-
-          return result;
-        } 
-      },
-    ],
+<script>
+  $('#paymentProofModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var itemId = button.data('id');
+        var modal = $(this);
+        modal.find('.modal-body #item-id').val(itemId);
     });
-
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-  });
-
 </script>
 
-@include('includes.lightbox')
-
-@include('includes.confirm-modal')
 
 @endpush

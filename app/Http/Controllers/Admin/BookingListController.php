@@ -35,7 +35,25 @@ class BookingListController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.booking-list.index');
+        $model = BookingList::with([
+            'room', 'user'
+        ])
+        ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+        ->get();
+
+        // return view('pages.admin.booking-list.index');
+        return view('pages.admin.booking-list.index2',compact('model'));
+    }
+
+    public function konfirmasi(Request $request){
+        // dd($request);
+        $model = BookingList::find($request->item_id);
+        $model->status = $request->status; // Update status to DIBAYAR
+        $model->save();
+        session()->flash('alert-success', 'Bukti pembayaran berhasil dikonfrimasi');
+
+        return redirect()->back();
+    
     }
 
     public function update($id, $value)
