@@ -41,7 +41,7 @@ class DashboardController extends Controller
         ])->count();
         
         
-        if(Auth::user()->role = 'ADMIN'){
+        if(Auth::user()->role == 'ADMIN'){
             $model = BookingList::with(['room', 'user']) // Eager load the relationships
             // ->where('user_id', Auth::user()->id) // Filter by user_id
             ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
@@ -54,10 +54,28 @@ class DashboardController extends Controller
         }
        
 
-        return view('pages.user.dashboard', [
-            'booking_today'     => $booking_today,
-            'booking_lifetime'  => $booking_lifetime,
-            'model'  => $model,
-        ]);
+        // return view('pages.user.dashboard', [
+        //     'booking_today'     => $booking_today,
+        //     'booking_lifetime'  => $booking_lifetime,
+        //     'model'  => $model,
+        // ]);
+// dd(Auth::user()->role);
+        if (Auth::user()->role === 'ADMIN') {
+
+            return redirect()->route('admin.dashboard');
+        } else {
+            // dd(1);
+            // Non-admin users
+            $model = BookingList::with(['room', 'user']) // Eager load the relationships
+                ->where('user_id', Auth::user()->id) // Filter by user_id
+                ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+                ->get();
+        
+            return view('pages.user.dashboard', [
+                'booking_today' => $booking_today,
+                'booking_lifetime' => $booking_lifetime,
+                'model' => $model,
+            ]);
+        }
     }
 }

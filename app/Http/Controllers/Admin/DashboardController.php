@@ -24,7 +24,11 @@ class DashboardController extends Controller
 
         $room                   = Room::all()->count();
         $user                   = User::where('ROLE', 'USER')->count();
-
+        $model = BookingList::with([
+            'room', 'user'
+        ])
+        ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+        ->get();
         return view('pages.admin.dashboard', [
             'booking_list_all'          => $booking_list_all,
             'booking_list_pending'      => $booking_list_pending,
@@ -36,6 +40,7 @@ class DashboardController extends Controller
             'booking_list_expired'      => $booking_list_expired,
             'room'                      => $room,
             'user'                      => $user,
+            'model'                      => $model,
         ]);
     }
 }
