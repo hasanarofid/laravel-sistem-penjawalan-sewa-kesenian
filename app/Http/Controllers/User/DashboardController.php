@@ -39,11 +39,20 @@ class DashboardController extends Controller
         $booking_lifetime   = BookingList::where([
             ['user_id', Auth::user()->id],
         ])->count();
-
-        $model = BookingList::with(['room', 'user']) // Eager load the relationships
-    ->where('user_id', Auth::user()->id) // Filter by user_id
-    ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
-    ->get();
+        
+        
+        if(Auth::user()->role = 'ADMIN'){
+            $model = BookingList::with(['room', 'user']) // Eager load the relationships
+            // ->where('user_id', Auth::user()->id) // Filter by user_id
+            ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+            ->get();
+        }else{
+            $model = BookingList::with(['room', 'user']) // Eager load the relationships
+            ->where('user_id', Auth::user()->id) // Filter by user_id
+            ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
+            ->get();
+        }
+       
 
         return view('pages.user.dashboard', [
             'booking_today'     => $booking_today,
