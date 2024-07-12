@@ -17,13 +17,15 @@ use App\Jobs\SendEmail;
 
 use App\Http\Requests\User\MyBookingListRequest;
 use App\Models\BarangkesenianM;
+use App\Models\SjfScheduling;
+use Carbon\Carbon;
 use DataTables;
 use Illuminate\Support\Facades\Validator;
 
 class MyBookingListController extends Controller
 {
     public function json(){
-        $data = BookingList::where('user_id', Auth::user()->id)->with([
+        $data = BookingList::where('id_customer', Auth::user()->id)->with([
             'kesenian'
         ]);
         // dd($data->get());
@@ -42,7 +44,7 @@ class MyBookingListController extends Controller
      */
     public function index()
     {
-        $model =  BookingList::where('user_id', Auth::user()->id)->with([
+        $model =  BookingList::where('id_customer', Auth::user()->id)->with([
             'kesenian'
         ])
         ->orderBy('created_at', 'desc')
@@ -78,11 +80,9 @@ class MyBookingListController extends Controller
      */
     public function create()
     {
-        $rooms = Room::orderBy('name')->get();
         $kesenian = BarangkesenianM::orderBy('nama')->get();
 
         return view('pages.user.my-booking-list.create', [
-            'rooms' => $rooms,
             'kesenians' => $kesenian,
         ]);
     }
@@ -100,7 +100,7 @@ class MyBookingListController extends Controller
 
         $data               = $request->all();
 
-        $data['user_id']    = Auth::user()->id;
+        $data['id_customer']    = Auth::user()->id;
         $data['status']     = 'PENDING';
 
         $room               = BarangkesenianM::select('nama')->where('id', $data['kesenian_id'])->firstOrFail();
@@ -108,31 +108,42 @@ class MyBookingListController extends Controller
         if(
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['barangkesenian_id', '=', $data['kesenian_id']],
+                ['id_barangkesenian', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])
             ->count() <= 0 || 
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['barangkesenian_id', '=', $data['kesenian_id']],
+                ['id_barangkesenian', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])
             ->count() <= 0 ||
             BookingList::where([
                 ['date', '=', $data['date']],
-                ['barangkesenian_id', '=', $data['kesenian_id']],
+                ['id_barangkesenian', '=', $data['kesenian_id']],
                 ['status', '=', 'DISETUJUI'],
             ])->count() <= 0
         ) {
             $model = new BookingList();
-            $model->barangkesenian_id =  $data['kesenian_id'];
+            $model->id_barangkesenian =  $data['kesenian_id'];
             $model->date =  $data['date'];
             $model->alamat =  $data['purpose'];
-            $model->user_id = Auth::user()->id;
+            $model->id_admin = 1;
+            $model->id_customer = Auth::user()->id;
             $model->status =  'PENDING';
+            // dd($model);
             if($model->save()) {
                 $request->session()->flash('alert-success', 'Kesenian '.$room->nama.' berhasil ditambahkan');
-                
+
+                // SjfScheduling
+                $jobs = new SjfScheduling();
+                $jobs->id_admin = 1;
+                $jobs->id_customer = Auth::user()->id;
+                $jobs->id_barangkesenian =$data['kesenian_id'];
+                $jobs->waktu_kedatangan = Carbon::now()->timestamp;
+                $jobs->lama_eksekusi = 1;
+                $jobs->save();
+
                 $user_name          = $this->getUserName();
                 $user_email         = $this->getUserEmail();
                 

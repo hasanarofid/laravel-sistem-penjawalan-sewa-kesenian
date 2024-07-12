@@ -12,7 +12,7 @@ use App\Models\BookingList;
 use App\Models\User;
 
 use App\Jobs\SendEmail;
-
+use App\Models\SjfScheduling;
 use DataTables;
 use Carbon\Carbon;
 
@@ -20,7 +20,7 @@ class BookingListController extends Controller
 {
     public function json(){
         $data = BookingList::with([
-            'room', 'user'
+            'kesenian', 'user'
         ]);
 
         return DataTables::of($data)
@@ -36,7 +36,7 @@ class BookingListController extends Controller
     public function index()
     {
         $model = BookingList::with([
-            'room', 'user'
+            'kesenian', 'user'
         ])
         ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
         ->get();
@@ -50,6 +50,25 @@ class BookingListController extends Controller
         $model = BookingList::find($request->item_id);
         $model->status = $request->status; // Update status to DIBAYAR
         $model->save();
+
+        $jobs = SjfScheduling::where('id_barangkesenian', $model->id_barangkesenian)
+                         ->orderBy('waktu_kedatangan')
+                         ->get();
+
+        // Initialize currentTime to the waktu_kedatangan of the first job
+        $currentTime = $jobs->first()->waktu_kedatangan ?? 0;
+
+        foreach ($jobs as $job) {
+            // if (is_null($job->mulai_eksekusi)) { // Check if the job hasn't started yet
+                $job->mulai_eksekusi = max($currentTime, $job->waktu_kedatangan); // Start time is the max of current time and arrival time
+                $job->selesai_eksekusi = $job->mulai_eksekusi + $job->lama_eksekusi; // End time is start time + execution time
+                $job->turn_around = $job->selesai_eksekusi - $job->waktu_kedatangan; // Turn around time is end time - arrival time
+                $job->save();
+
+                $currentTime = $job->selesai_eksekusi; // Update current time to the end time of the current job
+            // }
+        }
+
         session()->flash('alert-success', 'Bukti pembayaran berhasil dikonfrimasi');
 
         return redirect()->back();
@@ -84,63 +103,63 @@ class BookingListController extends Controller
                 if(
                     BookingList::where([
                         ['date', '=', $item['date']],
-                        ['room_id', '=', $item['room_id']],
+                        ['barangkesenian_id', '=', $item['barangkesenian_id']],
                         ['status', '=', 'DISETUJUI'],
                     ])
                     ->whereBetween('start_time', [$item['start_time'], $item['end_time']])
                     ->count() <= 0 && 
                     BookingList::where([
                         ['date', '=', $item['date']],
-                        ['room_id', '=', $item['room_id']],
+                        ['barangkesenian_id', '=', $item['barangkesenian_id']],
                         ['status', '=', 'DISETUJUI'],
                     ])
                     ->whereBetween('end_time', [$item['start_time'], $item['end_time']])
                     ->count() <= 0 &&
                     BookingList::where([
                         ['date', '=', $item['date']],
-                        ['room_id', '=', $item['room_id']],
+                        ['barangkesenian_id', '=', $item['barangkesenian_id']],
                         ['start_time', '<=', $item['start_time']],
                         ['end_time', '>=', $item['end_time']],
                         ['status', '=', 'DISETUJUI'],
                     ])->count() <= 0
                 ) {
                     if($item->update($data)) {
-                        session()->flash('alert-success', 'Booking Ruang '.$item->room->name.' sekarang '.$data['status']);
+                        session()->flash('alert-success', 'Booking Ruang '.$item->kesenian->nama.' sekarang '.$data['status']);
 
                         $to_role    = 'USER';
 
                         // use URL::to('/') for the url value
 
                         // URL::to('/my-booking-list)
-                        dispatch(new SendEmail($user_email, $user_name, $item->room->name, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $user_name, 'https://google.com', $data['status']));
+                        dispatch(new SendEmail($user_email, $user_name, $item->kesenian->nama, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $user_name, 'https://google.com', $data['status']));
 
                         $to_role    = 'ADMIN';
 
                         // URL::to('/admin/booking-list)
-                        dispatch(new SendEmail($admin_email, $user_name, $item->room->name, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $admin_name, 'https://google.com', $data['status']));
+                        dispatch(new SendEmail($admin_email, $user_name, $item->kesenian->nama, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $admin_name, 'https://google.com', $data['status']));
 
                     } else {
-                        session()->flash('alert-failed', 'Booking Ruang '.$item->room->name.' gagal diupdate');
+                        session()->flash('alert-failed', 'Booking Ruang '.$item->kesenian->nama.' gagal diupdate');
                     }
                 } else {
-                    session()->flash('alert-failed', 'Ruangan '.$item->room->name.' di waktu itu sudah dibooking');
+                    session()->flash('alert-failed', 'Ruangan '.$item->kesenian->nama.' di waktu itu sudah dibooking');
                 }   
             } elseif($data['status'] == 'DITOLAK') {
                 if($item->update($data)) {
-                    session()->flash('alert-success', 'Booking Ruang '.$item->room->name.' sekarang '.$data['status']);
+                    session()->flash('alert-success', 'Booking Ruang '.$item->kesenian->nama.' sekarang '.$data['status']);
 
                     $to_role    = 'USER';
 
                     // URL::to('/my-booking-list)
-                    dispatch(new SendEmail($user_email, $user_name, $item->room->name, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $user_name, 'https://google.com', $data['status']));
+                    dispatch(new SendEmail($user_email, $user_name, $item->kesenian->nama, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $user_name, 'https://google.com', $data['status']));
 
                     $to_role    = 'ADMIN';
 
                     // URL::to('/admin/booking-list)
-                    dispatch(new SendEmail($admin_email, $user_name, $item->room->name, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $admin_name, 'https://google.com', $data['status']));
+                    dispatch(new SendEmail($admin_email, $user_name, $item->kesenian->nama, $item['date'], $item['start_time'], $item['end_time'], $item['purpose'], $to_role, $admin_name, 'https://google.com', $data['status']));
 
                 } else {
-                    session()->flash('alert-failed', 'Booking Ruang '.$item->room->name.' gagal diupdate');
+                    session()->flash('alert-failed', 'Booking Ruang '.$item->kesenian->nama.' gagal diupdate');
                 }
             }
         } else {

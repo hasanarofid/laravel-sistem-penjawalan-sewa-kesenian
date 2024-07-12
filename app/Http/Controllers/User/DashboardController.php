@@ -17,10 +17,10 @@ class DashboardController extends Controller
     public function dashboard_booking_list(){
         $today = Carbon::today()->toDateString();
 
-        $data = BookingList::where('user_id', Auth::user()->id)
+        $data = BookingList::where('id_customer', Auth::user()->id)
         ->whereDate('created_at', '=', $today)
         ->with([
-            'room'
+            'kesenian'
         ])->take(3);
 
         return DataTables::of($data)
@@ -33,22 +33,22 @@ class DashboardController extends Controller
         // dd(1);
         $today = Carbon::today()->toDateString();
 
-        $booking_today      = BookingList::where('user_id', Auth::user()->id)
+        $booking_today      = BookingList::where('id_customer', Auth::user()->id)
         ->whereDate('created_at', '=', $today)
         ->count();
         $booking_lifetime   = BookingList::where([
-            ['user_id', Auth::user()->id],
+            ['id_customer', Auth::user()->id],
         ])->count();
         
         
         if(Auth::user()->role == 'ADMIN'){
-            $model = BookingList::with(['room', 'user']) // Eager load the relationships
-            // ->where('user_id', Auth::user()->id) // Filter by user_id
+            $model = BookingList::with(['kesenian', 'user']) // Eager load the relationships
+            // ->where('id_customer', Auth::user()->id) // Filter by user_id
             ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
             ->get();
         }else{
-            $model = BookingList::with(['room', 'user']) // Eager load the relationships
-            ->where('user_id', Auth::user()->id) // Filter by user_id
+            $model = BookingList::with(['kesenian', 'user']) // Eager load the relationships
+            ->where('id_customer', Auth::user()->id) // Filter by user_id
             ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
             ->get();
         }
@@ -66,8 +66,8 @@ class DashboardController extends Controller
         } else {
             // dd(1);
             // Non-admin users
-            $model = BookingList::with(['room', 'user']) // Eager load the relationships
-                ->where('user_id', Auth::user()->id) // Filter by user_id
+            $model = BookingList::with(['kesenian', 'user']) // Eager load the relationships
+                ->where('id_customer', Auth::user()->id) // Filter by user_id
                 ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
                 ->get();
         

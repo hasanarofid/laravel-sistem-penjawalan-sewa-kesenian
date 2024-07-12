@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BarangkesenianM;
 use Illuminate\Http\Request;
 
 use App\Models\BookingList;
@@ -22,10 +23,10 @@ class DashboardController extends Controller
         $booking_list_batal     = BookingList::where('status', 'BATAL')->count();
         $booking_list_expired   = BookingList::where('status', 'EXPIRED')->count();
 
-        $room                   = Room::all()->count();
+        $room                   = BarangkesenianM::all()->count();
         $user                   = User::where('ROLE', 'USER')->count();
         $model = BookingList::with([
-            'room', 'user'
+            'kesenian', 'user'
         ])
         ->orderBy('created_at', 'desc') // Order by timestamps from newest to oldest
         ->get();

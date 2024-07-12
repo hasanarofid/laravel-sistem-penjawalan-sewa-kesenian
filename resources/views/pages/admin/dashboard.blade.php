@@ -71,7 +71,7 @@
     @component('components.statistic-card')
       @slot('bg_color', 'bg-primary')
       @slot('icon', 'fas fa-door-open')
-      @slot('title', 'Total Ruangan')
+      @slot('title', 'Total Barang Kesenian')
       @slot('value', $room)
     @endcomponent
   </div>

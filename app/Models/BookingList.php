@@ -16,8 +16,9 @@ class BookingList extends Model
      * @var array
      */
     protected $fillable = [
-        'barangkesenian_id',
-        'user_id',
+        'id_barangkesenian',
+        'id_admin',
+        'id_customer',
         'date',
         'alamat',
         'bukti_pembayaran',
@@ -34,14 +35,18 @@ class BookingList extends Model
     ];
 
     public function kesenian(){
-        return $this->hasOne(BarangkesenianM::class, 'id', 'barangkesenian_id');
+        return $this->hasOne(BarangkesenianM::class, 'id', 'id_barangkesenian');
     }
 
-    public function room(){
-        return $this->hasOne(BarangkesenianM::class, 'id', 'barangkesenian_id');
-    }
+    // public function room(){
+    //     return $this->hasOne(BarangkesenianM::class, 'id', 'id_barangkesenian');
+    // }
 
     public function user(){
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'id_customer');
+    }
+
+    public function admin(){
+        return $this->hasOne(User::class, 'id', 'id_admin');
     }
 }

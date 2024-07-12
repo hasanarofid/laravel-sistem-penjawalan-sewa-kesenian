@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingListController;
 use App\Http\Controllers\Admin\KesenianController;
 use App\Http\Controllers\ChangePassController;
+use App\Http\Controllers\SjfSchedulingController;
 
 // use Illuminate\Support\Facades\Mail;
 
@@ -120,7 +121,7 @@ Route::prefix('admin')
 
         Route::put('/booking-list/{id}/update/{value}', [BookingListController::class, 'update'])
         ->name('booking-list.update');
-
+        Route::get('/sjf-schedule', [SjfSchedulingController::class, 'schedule'])->name('sjfSchedule.index');
         Route::resources([
             'user'          => UserController::class,
             'room'          => RoomController::class,

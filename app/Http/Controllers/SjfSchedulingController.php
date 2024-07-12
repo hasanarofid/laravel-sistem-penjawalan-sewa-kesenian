@@ -25,6 +25,6 @@ class SjfSchedulingController extends Controller
             $job->save();
         }
 
-        return view('sjf-schedule', compact('jobs'));
+        return view('pages.admin.sjf-schedule.index', compact('jobs'));
     }
 }
