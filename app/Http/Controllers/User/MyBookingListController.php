@@ -137,12 +137,13 @@ class MyBookingListController extends Controller
 
                 // SjfScheduling
                 $jobs = new SjfScheduling();
-                $jobs->id_admin = 1;
+                $jobs->id_admin = 1; // Assuming the admin ID is 1
                 $jobs->id_customer = Auth::user()->id;
-                $jobs->id_barangkesenian =$data['kesenian_id'];
+                $jobs->id_barangkesenian = $data['kesenian_id'];
                 $jobs->waktu_kedatangan = Carbon::now()->timestamp;
-                $jobs->lama_eksekusi = 1;
+                $jobs->lama_eksekusi = $this->calculateExecutionTime($data['kesenian_id']);
                 $jobs->save();
+
 
                 $user_name          = $this->getUserName();
                 $user_email         = $this->getUserEmail();
@@ -174,6 +175,21 @@ class MyBookingListController extends Controller
         return redirect()->route('my-booking-list.index');
     }
 
+
+    private function calculateExecutionTime($kesenianId)
+{
+    // Retrieve the BarangkesenianM instance
+    $barangkesenian = BarangkesenianM::find($kesenianId);
+
+    // Implement your logic to calculate the execution time
+    // For example, let's base the execution time on the 'harga' field
+    if ($barangkesenian) {
+        $executionTime = $barangkesenian->harga / 1000; // Simple example logic
+        return (int)ceil($executionTime); // Return execution time as an integer
+    }
+
+    return 1; // Default placeholder value if no specific logic is applied
+}
     /**
      * Cancel the specified data.
      *

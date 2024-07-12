@@ -51,22 +51,23 @@ class BookingListController extends Controller
         $model->status = $request->status; // Update status to DIBAYAR
         $model->save();
 
-        $jobs = SjfScheduling::where('id_barangkesenian', $model->id_barangkesenian)
-                         ->orderBy('waktu_kedatangan')
-                         ->get();
+       // Get the SJF scheduling jobs for the same 'id_barangkesenian'
+            $jobs = SjfScheduling::
+            // where('id_barangkesenian', $model->id_barangkesenian)
+            // ->
+            orderBy('waktu_kedatangan')
+            ->get();
 
         // Initialize currentTime to the waktu_kedatangan of the first job
         $currentTime = $jobs->first()->waktu_kedatangan ?? 0;
 
         foreach ($jobs as $job) {
-            // if (is_null($job->mulai_eksekusi)) { // Check if the job hasn't started yet
-                $job->mulai_eksekusi = max($currentTime, $job->waktu_kedatangan); // Start time is the max of current time and arrival time
-                $job->selesai_eksekusi = $job->mulai_eksekusi + $job->lama_eksekusi; // End time is start time + execution time
-                $job->turn_around = $job->selesai_eksekusi - $job->waktu_kedatangan; // Turn around time is end time - arrival time
-                $job->save();
+        $job->mulai_eksekusi = max($currentTime, $job->waktu_kedatangan); // Start time is the max of current time and arrival time
+        $job->selesai_eksekusi = $job->mulai_eksekusi + $job->lama_eksekusi; // End time is start time + execution time
+        $job->turn_around = $job->selesai_eksekusi - $job->waktu_kedatangan; // Turn around time is end time - arrival time
+        $job->save();
 
-                $currentTime = $job->selesai_eksekusi; // Update current time to the end time of the current job
-            // }
+        $currentTime = $job->selesai_eksekusi; // Update current time to the end time of the current job
         }
 
         session()->flash('alert-success', 'Bukti pembayaran berhasil dikonfrimasi');
@@ -74,6 +75,8 @@ class BookingListController extends Controller
         return redirect()->back();
     
     }
+
+
 
     public function update($id, $value)
     {
