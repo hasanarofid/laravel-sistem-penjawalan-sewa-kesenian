@@ -124,6 +124,10 @@ class MyBookingListController extends Controller
                 ['status', '=', 'DISETUJUI'],
             ])->count() <= 0
         ) {
+            $now = Carbon::now();
+$waktu_kedatangan = $now->diffInMinutes($now->copy()->startOfDay()); // Minutes since midnight
+
+
             $model = new BookingList();
             $model->id_barangkesenian =  $data['kesenian_id'];
             $model->date =  $data['date'];
@@ -140,8 +144,8 @@ class MyBookingListController extends Controller
                 $jobs->id_admin = 1; // Assuming the admin ID is 1
                 $jobs->id_customer = Auth::user()->id;
                 $jobs->id_barangkesenian = $data['kesenian_id'];
-                $jobs->waktu_kedatangan = Carbon::now()->timestamp;
-                $jobs->lama_eksekusi = $this->calculateExecutionTime($data['kesenian_id']);
+                $jobs->waktu_kedatangan = $waktu_kedatangan;
+                $jobs->lama_eksekusi = $this->calculateExecutionTime($data['date']);
                 $jobs->save();
 
 
@@ -176,20 +180,17 @@ class MyBookingListController extends Controller
     }
 
 
-    private function calculateExecutionTime($kesenianId)
-{
-    // Retrieve the BarangkesenianM instance
-    $barangkesenian = BarangkesenianM::find($kesenianId);
+    private function calculateExecutionTime($date)
+    {
+        // Calculate the execution time based on the date
+        $now = Carbon::now();
+        $bookingDate = Carbon::parse($date);
 
-    // Implement your logic to calculate the execution time
-    // For example, let's base the execution time on the 'harga' field
-    if ($barangkesenian) {
-        $executionTime = $barangkesenian->harga / 1000; // Simple example logic
-        return (int)ceil($executionTime); // Return execution time as an integer
+        // Calculate the difference in minutes
+        $executionTime = $now->diffInMinutes($bookingDate);
+
+        return max(1, $executionTime); // Return execution time as an integer, ensuring a minimum of 1 minute
     }
-
-    return 1; // Default placeholder value if no specific logic is applied
-}
     /**
      * Cancel the specified data.
      *
