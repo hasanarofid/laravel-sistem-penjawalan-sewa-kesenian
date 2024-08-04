@@ -46,35 +46,39 @@ class BookingListController extends Controller
     }
 
     public function konfirmasi(Request $request){
-        // dd($request);
+        // Find the booking and update its status
         $model = BookingList::find($request->item_id);
         $model->status = $request->status; // Update status to DIBAYAR
         $model->save();
-
-       // Get the SJF scheduling jobs for the same 'id_barangkesenian'
-            $jobs = SjfScheduling::
-            // where('id_barangkesenian', $model->id_barangkesenian)
-            // ->
-            orderBy('waktu_kedatangan')
-            ->get();
-
-        // Initialize currentTime to the waktu_kedatangan of the first job
-        $currentTime = $jobs->first()->waktu_kedatangan ?? 0;
-
-        foreach ($jobs as $job) {
-        $job->mulai_eksekusi = max($currentTime, $job->waktu_kedatangan); // Start time is the max of current time and arrival time
-        $job->selesai_eksekusi = $job->mulai_eksekusi + $job->lama_eksekusi; // End time is start time + execution time
-        $job->turn_around = $job->selesai_eksekusi - $job->waktu_kedatangan; // Turn around time is end time - arrival time
-        $job->save();
-
-        $currentTime = $job->selesai_eksekusi; // Update current time to the end time of the current job
-        }
-
-        session()->flash('alert-success', 'Bukti pembayaran berhasil dikonfrimasi');
-
-        return redirect()->back();
     
+        // Get the SJF scheduling jobs ordered by 'waktu_kedatangan'
+        $jobs = SjfScheduling::orderBy('waktu_kedatangan')->get();
+    
+        // Initialize currentTime to the waktu_kedatangan of the first job (in hours)
+        $currentTime = ($jobs->first()->waktu_kedatangan ?? 0) / (60*7); // Convert to hours
+    
+        foreach ($jobs as $job) {
+            $waktu_kedatangan_hours = $job->waktu_kedatangan / (60*7); // Convert to hours
+            $lama_eksekusi_hours = $job->lama_eksekusi / (60*7); // Convert to hours
+    
+            $job->mulai_eksekusi = max($currentTime, $waktu_kedatangan_hours); // Start time is the max of current time and arrival time (in hours)
+            $job->selesai_eksekusi = $job->mulai_eksekusi + $lama_eksekusi_hours; // End time is start time + execution time (in hours)
+            $job->turn_around = $job->selesai_eksekusi - $waktu_kedatangan_hours; // Turn around time is end time - arrival time (in hours)
+    
+            // Save the results back in minutes
+            $job->mulai_eksekusi *= 60*7; // Convert back to minutes
+            $job->selesai_eksekusi *= 60*7; // Convert back to minutes
+            $job->turn_around *= 60*7; // Convert back to minutes
+            $job->save();
+    
+            $currentTime = $job->selesai_eksekusi / (60*7); // Update current time to the end time of the current job (in hours)
+        }
+    
+        session()->flash('alert-success', 'Bukti pembayaran berhasil dikonfirmasi');
+    
+        return redirect()->back();
     }
+    
 
 
 

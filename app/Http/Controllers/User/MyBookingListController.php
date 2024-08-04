@@ -185,10 +185,10 @@ $waktu_kedatangan = $now->diffInMinutes($now->copy()->startOfDay()); // Minutes 
         // Calculate the execution time based on the date
         $now = Carbon::now();
         $bookingDate = Carbon::parse($date);
-
-        // Calculate the difference in minutes
-        $executionTime = $now->diffInMinutes($bookingDate);
-
+    
+        // Calculate the difference in hours
+        $executionTime = $now->diffInHours($bookingDate);
+    
         return max(1, $executionTime); // Return execution time as an integer, ensuring a minimum of 1 minute
     }
     /**
