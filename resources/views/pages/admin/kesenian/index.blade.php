@@ -111,13 +111,14 @@
         data: 'paket',
       },
       {
-        name: 'anggota',
-        data: 'anggota',
-      },
-      {
         name: 'harga',
         data: 'harga',
       },
+      {
+        name: 'anggota',
+        data: 'anggota',
+      },
+      
       {
         name: 'deskripsi',
         data: 'deskripsi',
