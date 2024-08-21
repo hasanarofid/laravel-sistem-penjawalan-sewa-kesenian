@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class BookingList extends Model
 {
@@ -22,8 +23,21 @@ class BookingList extends Model
         'date',
         'alamat',
         'bukti_pembayaran',
-        'status'
+        'status',
+        'kode_transaksi'
     ];
+
+
+     // Generate a unique kode_transaksi
+     protected static function boot()
+     {
+         parent::boot();
+ 
+         static::creating(function ($model) {
+             // Generate kode_transaksi with a prefix and timestamp
+             $model->kode_transaksi = 'TRX-' . Str::upper(Str::random(10)) . '-' . now()->format('YmdHis');
+         });
+     }
 
     /**
      * The attributes that should be hidden for arrays.

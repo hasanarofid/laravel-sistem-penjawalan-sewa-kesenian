@@ -23,8 +23,11 @@
   <thead>
     <tr>
       <th>No</th>
+      <th>Kode Transaksi</th>
       <th>Foto</th>
+      <th>Video</th>
       <th>Kesenian</th>
+      <th>Harga Paket</th>
       <th>Tanggal</th>
       <th>Alamat</th>
       <th>Status</th> 
@@ -40,13 +43,26 @@
     <tr>
         <td>{{ $no++ }}</td>
         <td>
+            <img src="{!! QrCode::size(200)->generate($item->kode_transaksi) !!}">
+        </td>
+        <td>
             <div class="gallery gallery-fw">
                 <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
                     <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
                 </a>
             </div>
         </td>
+
+        <td>
+            <div class="gallery gallery-fw">
+                <video width="320" height="240" controls>`
+                    <source src="{{ asset('storage/'.$item->kesenian->video) }}" type="video/mp4">`
+                    Your browser does not support the video tag.`
+                </video>
+            </div>
+        </td>
         <td>{{ $item->kesenian->nama }}</td>
+        <td>{{ number_format($item->kesenian->harga) }}</td>
         <td>{{ $item->date }}</td>
         <td>{{ $item->alamat }}</td>
         <td>{{ $item->status }}</td>

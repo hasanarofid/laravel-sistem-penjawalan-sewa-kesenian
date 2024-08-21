@@ -68,5 +68,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
-
+    'uploads' => [
+        'max_size' => env('UPLOAD_MAX_SIZE', 50 * 1024 * 1024), // 50MB
+    ],
 ];

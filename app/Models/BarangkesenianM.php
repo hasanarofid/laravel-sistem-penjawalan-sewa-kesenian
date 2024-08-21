@@ -17,6 +17,7 @@ class BarangkesenianM extends Model
         'anggota',
         'harga',
         'deskripsi',
+        'video', // Add this line
     ];
 
 }

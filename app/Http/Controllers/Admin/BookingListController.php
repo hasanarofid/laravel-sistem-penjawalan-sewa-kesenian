@@ -15,7 +15,7 @@ use App\Jobs\SendEmail;
 use App\Models\SjfScheduling;
 use DataTables;
 use Carbon\Carbon;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode; 
 class BookingListController extends Controller
 {
     public function json(){
@@ -174,5 +174,12 @@ class BookingListController extends Controller
         }
         
         return redirect()->route('booking-list.index');
+    }
+    public function generateQrCode($kode_transaksi)
+    {
+        // Generate a QR code for the given kode_transaksi
+        $qrCode = QrCode::size(200)->generate($kode_transaksi);
+    
+        return response($qrCode)->header('Content-Type', 'image/png');
     }
 }

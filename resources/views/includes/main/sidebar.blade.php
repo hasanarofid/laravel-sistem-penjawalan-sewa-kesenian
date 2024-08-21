@@ -65,12 +65,12 @@
           </a>
         </li>
 
-        <li class="{{ request()->is('admin/sjf-schedule*') ? 'active' : '' }}">
+        {{-- <li class="{{ request()->is('admin/sjf-schedule*') ? 'active' : '' }}">
           <a class="nav-link" href="{{ route('sjfSchedule.index') }}">
             @inject('booking_list', 'App\Models\BookingList')
             <i class="fas fa-list"></i> <span> SJF Schedule</span>
           </a>
-        </li>
+        </li> --}}
 
         <li class="menu-header">SETTING</li>
         <li class="{{ request()->is('admin/change-pass*') ? 'active' : '' }}">

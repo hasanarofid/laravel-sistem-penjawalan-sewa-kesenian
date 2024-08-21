@@ -15,6 +15,9 @@ use App\Http\Controllers\Admin\BookingListController;
 use App\Http\Controllers\Admin\KesenianController;
 use App\Http\Controllers\ChangePassController;
 use App\Http\Controllers\SjfSchedulingController;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+
 
 // use Illuminate\Support\Facades\Mail;
 
@@ -30,6 +33,12 @@ use App\Http\Controllers\SjfSchedulingController;
 */
 // Route::get('/', [FrontendController::class, 'index'])->name('home');
 Auth::routes(['register' => true, 'reset' => false, 'verify' => false]);
+Route::get('/generate-qr-code/{kode_transaksi}', [BookingListController::class, 'generateQrCode'])->name('generate.qr.code');
+
+Route::get('/test-qr-code', function () {
+    return QrCode::size(200)->generate('Test QR Code');
+});
+
 
 Route::prefix('/')
     ->get('/', [FrontendController::class, 'index'])

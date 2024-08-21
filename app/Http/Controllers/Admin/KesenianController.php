@@ -46,7 +46,13 @@ class KesenianController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
+        // dd($data['video']);
+     
+        if(isset($data['video'])){
+            $data['video']          = $request->file('video')->store(
+                'assets/video/kesenian', 'public'
+            );
+        }
 
         if(isset($data['foto'])){
             $data['foto']          = $request->file('foto')->store(
@@ -113,7 +119,7 @@ class KesenianController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-
+        
         if(isset($data['foto'])){
             $data['foto']          = $request->file('foto')->store(
                 'assets/image/kesenian', 'public'

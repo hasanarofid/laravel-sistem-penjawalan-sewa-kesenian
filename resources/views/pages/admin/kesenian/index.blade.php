@@ -29,6 +29,7 @@
       <tr>
         <th>#</th>
         <th>Foto</th>
+        <th>Video</th>
         <th>Nama</th>
         <th>Paket</th>
         <th>Harga</th>
@@ -74,6 +75,22 @@
           }
         }
       },
+      {
+                name: 'video',
+                data: 'video',
+                orderable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                    if (data != null) {
+                        return `<video width="320" height="240" controls>`
+                            + `<source src="{{ asset('storage/${data}') }}" type="video/mp4">`
+                            + `Your browser does not support the video tag.`
+                        + `</video>`;
+                    } else {
+                        return '-';
+                    }
+                }
+            },
       {
         name: 'nama',
         data: 'nama',
@@ -134,7 +151,7 @@
 
       $('.modal-title').html(title);
       $('.modal-body').html(body);
-      $('#confirm-form').attr('action', 'room/'+id);
+      $('#confirm-form').attr('action', 'kesenian/'+id);
       $('#confirm-form').attr('method', 'POST');
       $('#submit-btn').attr('class', 'btn btn-danger');
       $('#lara-method').attr('value', 'delete');

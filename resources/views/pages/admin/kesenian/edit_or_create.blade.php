@@ -40,7 +40,7 @@
 @endsection 
     
 @section('section-lead')
-  Silakan isi form di bawah ini untuk @if(isset($item)) mengedit data {{ $item->name }} @else menambah data Ruangan. @endif
+  Silakan isi form di bawah ini untuk @if(isset($item)) mengedit data {{ $item->name }} @else menambah data Kesenian. @endif
 @endsection
 
 @section('content')
@@ -96,44 +96,44 @@
       @endisset
       @endcomponent
 
-  @component('components.input-field')
-  @slot('input_label', 'Harga')
-  @slot('input_type', 'number')
-  @slot('input_name', 'harga')
-  @isset($item->harga)
-    @slot('input_value')
-      {{ $item->harga }}
-    @endslot 
-  @endisset
-@endcomponent
-
-@component('components.input-field')
-@slot('input_label', 'Anggota')
-@slot('input_type', 'text')
-@slot('input_name', 'anggota')
-@isset($item->anggota)
-  @slot('input_value')
-    {{ $item->anggota }}
-  @endslot 
-@endisset
-@isset($item)
-  @slot('other_attributes', 'autofocus')
-@endisset
-@endcomponent
-@component('components.input-field')
-    @slot('input_label', 'Deskripsi')
-    @slot('input_type', 'textarea')
-    @slot('input_name', 'deskripsi')
-    @isset($item->deskripsi)
+      @component('components.input-field')
+      @slot('input_label', 'Harga')
+      @slot('input_type', 'number')
+      @slot('input_name', 'harga')
+      @isset($item->harga)
         @slot('input_value')
-            {{ $item->deskripsi }}
+          {{ $item->harga }}
         @endslot 
-    @endisset
-    @isset($item)
-        @slot('other_attributes', 'autofocus')
-    @endisset
-@endcomponent
+      @endisset
+      @endcomponent
 
+      @component('components.input-field')
+      @slot('input_label', 'Anggota')
+      @slot('input_type', 'text')
+      @slot('input_name', 'anggota')
+      @isset($item->anggota)
+        @slot('input_value')
+          {{ $item->anggota }}
+        @endslot 
+      @endisset
+      @isset($item)
+        @slot('other_attributes', 'autofocus')
+      @endisset
+      @endcomponent
+
+      @component('components.input-field')
+          @slot('input_label', 'Deskripsi')
+          @slot('input_type', 'textarea')
+          @slot('input_name', 'deskripsi')
+          @isset($item->deskripsi)
+              @slot('input_value')
+                  {{ $item->deskripsi }}
+              @endslot 
+          @endisset
+          @isset($item)
+              @slot('other_attributes', 'autofocus')
+          @endisset
+      @endcomponent
 
       @component('components.input-field')
           @slot('input_label', 'Foto')
@@ -141,6 +141,15 @@
           @slot('input_name', 'foto')
           @isset($item)
             @slot('help_text', 'Tidak perlu input foto jika tidak ingin mengeditnya')
+          @endisset 
+      @endcomponent
+
+      @component('components.input-field')
+          @slot('input_label', 'Video')
+          @slot('input_type', 'file')
+          @slot('input_name', 'video')
+          @isset($item)
+            @slot('help_text', 'Tidak perlu input video jika tidak ingin mengeditnya')
           @endisset 
       @endcomponent
 
