@@ -1,4 +1,23 @@
+@if (Auth::user()->role == 'ADMIN')
 <div class="navbar-bg"></div>
+    
+@else
+<style>
+  .navbar-bg-user {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 115px;
+  background-color: #32CD32;
+  z-index: -1;
+}
+</style>
+<div class="navbar-bg-user"></div>
+
+@endif
+
 <nav class="navbar navbar-expand-lg main-navbar">
   <form class="form-inline mr-auto">
     <ul class="navbar-nav mr-3">

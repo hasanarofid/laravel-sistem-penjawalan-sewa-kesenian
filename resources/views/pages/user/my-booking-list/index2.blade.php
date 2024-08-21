@@ -43,7 +43,7 @@
     <tr>
         <td>{{ $no++ }}</td>
         <td>
-            <img src="{!! QrCode::size(200)->generate($item->kode_transaksi) !!}">
+            <img src="{{ route('generate.qr.code', $item->kode_transaksi) }}" alt="QR Code">
         </td>
         <td>
             <div class="gallery gallery-fw">
