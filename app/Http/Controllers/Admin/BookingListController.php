@@ -178,7 +178,7 @@ class BookingListController extends Controller
     public function generateQrCode($kode_transaksi)
     {
         // Generate a QR code for the given kode_transaksi
-        $qrCode = QrCode::size(100)->generate($kode_transaksi);
+        $qrCode = QrCode::size(200)->generate($kode_transaksi);
 
     return response($qrCode)->header('Content-Type', 'image/svg+xml');
     }

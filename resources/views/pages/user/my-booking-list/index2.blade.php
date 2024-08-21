@@ -23,7 +23,7 @@
   <thead>
     <tr>
       <th>No</th>
-      <th>Kode Transaksi</th>
+      {{-- <th>Kode Transaksi</th> --}}
       <th>Foto</th>
       <th>Video</th>
       <th>Kesenian</th>
@@ -42,9 +42,9 @@
     @foreach ($model as $item)
     <tr>
         <td>{{ $no++ }}</td>
-        <td>
+        {{-- <td>
             <img src="{{ route('generate.qr.code', $item->kode_transaksi) }}" alt="QR Code">
-        </td>
+        </td> --}}
         <td>
             <div class="gallery gallery-fw">
                 <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
@@ -112,6 +112,11 @@
                     <p class="text-center mb-0">1310017243298</p>
                     <p class="text-center">Mandiri</p>
                     <p class="text-center font-weight-bold">Fanisa Nur Fauzi</p>
+                </div>
+            </div>
+            <div class="row mb-3 text-center">
+                <div class="col">
+                    <img src="{{ route('generate.qr.code', $item->kode_transaksi) }}" alt="QR Code" class="img-fluid">
                 </div>
             </div>
               <input type="hidden" name="item_id" id="item-id">
