@@ -23,6 +23,7 @@ Berikut ini adalah daftar seluruh booking dari setiap user.
       <th>No</th>
       <th>User</th>
       <th>Foto</th>
+      <th>Video</th>
       <th>Kesenian</th>
       <th>Tanggal</th>
       <th>Alamat</th>
@@ -40,10 +41,47 @@ Berikut ini adalah daftar seluruh booking dari setiap user.
         <td>{{ $no++ }}</td>
         <td>{{ $item->user->name }}</td>
         <td>
+            @php
+                $item->kesenian->foto = json_decode($item->kesenian->foto, true);
+                // dd($item->kesenian->foto);
+            @endphp
+            @if(is_array($item->kesenian->foto) && !empty($item->kesenian->foto))
+                <div id="carousel-{{ $item->id }}" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        @foreach($item->kesenian->foto as $index => $foto)
+                            <li data-target="#carousel-{{ $item->id }}" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"></li>
+                        @endforeach
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach($item->kesenian->foto as $index => $foto)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <a href="{{ asset('storage/uploads/'.$foto) }}" data-toggle="lightbox">
+                                    <img src="{{ asset('storage/uploads/'.$foto) }}" class="d-block" style="height: 200px; width:200px">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <a class="carousel-control-prev" href="#carousel-{{ $item->id }}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-{{ $item->id }}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            @else
+                <p>No photos available</p>
+            @endif
+        </td>
+        
+
+        <td>
             <div class="gallery gallery-fw">
-                <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
-                    <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
-                </a>
+                <video width="320" height="240" controls>`
+                    <source src="{{ asset('storage/'.$item->kesenian->video) }}" type="video/mp4">`
+                    Your browser does not support the video tag.`
+                </video>
             </div>
         </td>
         <td>{{ $item->kesenian->nama }}</td>

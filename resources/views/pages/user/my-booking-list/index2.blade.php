@@ -18,7 +18,7 @@
 @section('content')
 
       <a href="{{ route('my-booking-list.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Booking</a>
-  
+      <div class="table-responsive">
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -46,12 +46,40 @@
             <img src="{{ route('generate.qr.code', $item->kode_transaksi) }}" alt="QR Code">
         </td> --}}
         <td>
-            <div class="gallery gallery-fw">
-                <a href="{{ asset('storage/'.$item->kesenian->foto) }}" data-toggle="lightbox">
-                    <img src="{{ asset('storage/'.$item->kesenian->foto) }}" class="img-fluid" style="min-width: 100px; height: 100px;">
-                </a>
-            </div>
+            @php
+                $item->kesenian->foto = json_decode($item->kesenian->foto, true);
+                // dd($item->kesenian->foto);
+            @endphp
+            @if(is_array($item->kesenian->foto) && !empty($item->kesenian->foto))
+                <div id="carousel-{{ $item->id }}" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        @foreach($item->kesenian->foto as $index => $foto)
+                            <li data-target="#carousel-{{ $item->id }}" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"></li>
+                        @endforeach
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach($item->kesenian->foto as $index => $foto)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <a href="{{ asset('storage/uploads/'.$foto) }}" data-toggle="lightbox">
+                                    <img src="{{ asset('storage/uploads/'.$foto) }}" class="d-block" style="height: 200px; width:200px">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <a class="carousel-control-prev" href="#carousel-{{ $item->id }}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-{{ $item->id }}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            @else
+                <p>No photos available</p>
+            @endif
         </td>
+        
 
         <td>
             <div class="gallery gallery-fw">
@@ -79,7 +107,7 @@
         </td>
         <td>
             @if ($item->status !== 'DIBAYAR')
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#paymentProofModal" data-id="{{ $item->id }}">Kirim Bukti</a>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#paymentProofModal" data-id="{{ $item->id }}" data-id="{{ $item->id }}" data-kode-transaksi="{{ $item->kode_transaksi }}">Kirim Bukti</a>
             @else
                 <button class="btn btn-secondary" disabled>Kirim Bukti</button>
             @endif
@@ -90,7 +118,7 @@
   </tbody>
 </table>
 
-
+      </div>
 @endsection
 
 
@@ -116,7 +144,7 @@
             </div>
             <div class="row mb-3 text-center">
                 <div class="col">
-                    <img src="{{ route('generate.qr.code', $item->kode_transaksi) }}" alt="QR Code" class="img-fluid">
+                    <img src="" alt="QR Code" class="img-fluid" id="qr-code-image">
                 </div>
             </div>
               <input type="hidden" name="item_id" id="item-id">
@@ -139,12 +167,19 @@
 <script src="//cdn.datatables.net/plug-ins/1.10.22/dataRender/ellipsis.js"></script>
 
 <script>
-  $('#paymentProofModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var itemId = button.data('id');
-        var modal = $(this);
-        modal.find('.modal-body #item-id').val(itemId);
-    });
+$('#paymentProofModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var itemId = button.data('id');
+    var kodeTransaksi = button.data('kode-transaksi'); // Get the kode_transaksi from the data attribute
+    var modal = $(this);
+
+    modal.find('.modal-body #item-id').val(itemId);
+
+    // Set the QR code source dynamically based on the kode_transaksi
+    var qrCodeUrl = "{{ route('generate.qr.code', ':kode_transaksi') }}";
+    qrCodeUrl = qrCodeUrl.replace(':kode_transaksi', kodeTransaksi);
+    modal.find('.modal-body #qr-code-image').attr('src', qrCodeUrl);
+});
 </script>
 
 

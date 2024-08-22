@@ -79,7 +79,7 @@
             data.forEach(function (foto, index) {
                 galleryHtml += `<div class="carousel-item ${index === 0 ? 'active' : ''}">`
                     + `<a href="{{ asset('storage/uploads/${foto}') }}" data-toggle="lightbox">`
-                    + `<img src="{{ asset('storage/uploads/${foto}') }}" class="d-block w-100" style="height: auto;">`
+                    + `<img src="{{ asset('storage/uploads/${foto}') }}" class="d-block " style="height: 200px;width:200px">`
                     + `</a>`
                     + `</div>`;
             });

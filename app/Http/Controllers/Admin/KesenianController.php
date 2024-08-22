@@ -103,6 +103,11 @@ class KesenianController extends Controller
 
         return DataTables::of($data)
         ->addIndexColumn()
+        ->editColumn('foto', function($row) {
+            // Decode JSON-encoded string to PHP array
+            $fotoArray = json_decode($row->foto, true);
+            return $fotoArray;
+        })
         ->make(true);
     }
 
