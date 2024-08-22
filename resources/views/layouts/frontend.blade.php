@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-2 d-none d-lg-block">
                             <div class="buy_ticket">
-                                <a href="#" class="boxed-btn-white">Sewa</a>
+                                <a href="{{ url('login') }}" class="boxed-btn-white">Sewa</a>
                             </div>
                         </div>
                         <div class="col-12">
@@ -129,7 +129,7 @@
                 <div class="col-xl-12 col-md-12">
                     <div class="about_thumb" style="position: relative;">
                         <img src="{{ asset('sanggar/img/sanggar/sanggar-utama.jpeg') }}" alt="">
-                        <a href="{{ route('login') }}" class="boxed-btn-white btn btn-primary" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        <a href="{{ url('login') }}" class="boxed-btn-white btn btn-primary" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             Login
                         </a>
                     </div>
@@ -398,7 +398,7 @@
                     <div class="resister_text text-center">
                         <h3>Sewa <br>
                             Kesenian</h3>
-                        <a href="{{ route('login') }}" class="boxed-btn-white">Sewa</a>
+                        <a href="{{ url('login') }}" class="boxed-btn-white">Sewa</a>
                     </div>
                 </div>
             </div>
