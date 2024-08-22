@@ -15,7 +15,8 @@ class CreateBarangkesenianM extends Migration
     {
         Schema::create('barangkesenian_m', function (Blueprint $table) {
             $table->id();
-            $table->string('foto')->nullable();
+            $table->json('foto')->nullable();
+            // $table->string('foto')->nullable();
             $table->string('nama');
             $table->text('paket');
             $table->string('anggota');

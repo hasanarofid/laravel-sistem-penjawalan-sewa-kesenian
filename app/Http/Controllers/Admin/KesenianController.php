@@ -13,6 +13,11 @@ class KesenianController extends Controller
 
         return DataTables::of($data)
         ->addIndexColumn()
+        ->editColumn('foto', function($row) {
+            // Decode JSON-encoded string to PHP array
+            $fotoArray = json_decode($row->foto, true);
+            return $fotoArray;
+        })
         ->make(true);
     }
     /**
@@ -54,13 +59,31 @@ class KesenianController extends Controller
             );
         }
 
-        if(isset($data['foto'])){
-            $data['foto']          = $request->file('foto')->store(
-                'assets/image/kesenian', 'public'
-            );
+        // if(isset($data['foto'])){
+        //     $data['foto']          = $request->file('foto')->store(
+        //         'assets/image/kesenian', 'public'
+        //     );
+        // }
+        $fotos = [];
+    if ($request->hasFile('foto')) {
+        foreach ($request->file('foto') as $file) {
+            // Generate a unique name for each file
+            $name = time() . '_' . $file->getClientOriginalName();
+            // Store the file in the 'public/uploads' directory
+            $file->storeAs('public/uploads', $name);
+            $fotos[] = $name;
         }
+    }
+    
 
+       
+        // Prepare the data for creation
+        // $data = $request->all();
+        $data['foto'] = json_encode($fotos); // Convert the $fotos array to a JSON string
+
+        // Create the new BarangkesenianM record
         $create_room = BarangkesenianM::create($data);
+
         
         if($create_room) {
             $request->session()->flash('alert-success', 'Kesenian '.$data['nama'].' berhasil ditambahkan');

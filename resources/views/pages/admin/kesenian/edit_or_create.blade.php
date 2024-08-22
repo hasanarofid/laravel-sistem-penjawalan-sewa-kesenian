@@ -134,15 +134,25 @@
               @slot('other_attributes', 'autofocus')
           @endisset
       @endcomponent
-
-      @component('components.input-field')
-          @slot('input_label', 'Foto')
-          @slot('input_type', 'file')
-          @slot('input_name', 'foto')
-          @isset($item)
-            @slot('help_text', 'Tidak perlu input foto jika tidak ingin mengeditnya')
-          @endisset 
-      @endcomponent
+      <div class="form-group">
+        <label for="foto">Foto</label>
+        <input type="file" class="form-control" id="foto" name="foto[]" multiple accept="image/*"> <!-- Accepts only image files -->
+        @isset($item)
+            <small class="form-text text-muted">Tidak perlu input foto jika tidak ingin mengeditnya</small>
+        @endisset
+    </div>
+    
+    
+      {{-- @component('components.input-field')
+      @slot('input_label', 'Foto')
+      @slot('input_type', 'file')
+      @slot('input_name', 'foto[]')  <!-- Use an array name for multiple files -->
+      @slot('multiple', true)  <!-- Allow multiple file selection -->
+      @isset($item)
+          @slot('help_text', 'Tidak perlu input foto jika tidak ingin mengeditnya')
+      @endisset 
+  @endcomponent
+   --}}
 
       @component('components.input-field')
           @slot('input_label', 'Video')

@@ -19,5 +19,7 @@ class BarangkesenianM extends Model
         'deskripsi',
         'video', // Add this line
     ];
-
+    protected $casts = [
+        'foto' => 'array', // Cast 'foto' as an array
+    ];
 }

@@ -59,22 +59,50 @@
         searchable: false
       },
       {
-        name: 'foto',
-        data: 'foto',
-        orderable: false, 
-        searchable: false,
-        render: function ( data, type, row ) {
-          if(data != null) {
-            return `<div class="gallery gallery-fw">`
-              + `<a href="{{ asset('storage/${data}') }}" data-toggle="lightbox">`
-                + `<img src="{{ asset('storage/${data}') }}" class="img-fluid" style="min-width: 80px; height: auto;">`
-              + `</a>`
-            + '</div>';
-          } else {
-            return '-'
-          }
+    name: 'foto',
+    data: 'foto',
+    orderable: false,
+    searchable: false,
+    render: function (data, type, row) {
+        if (data && Array.isArray(data)) {
+            var galleryHtml = `<div id="carousel-${row.id}" class="carousel slide" data-ride="carousel">`;
+
+            // Indicators
+            galleryHtml += '<ol class="carousel-indicators">';
+            data.forEach(function (foto, index) {
+                galleryHtml += `<li data-target="#carousel-${row.id}" data-slide-to="${index}" class="${index === 0 ? 'active' : ''}"></li>`;
+            });
+            galleryHtml += '</ol>';
+
+            // Slides
+            galleryHtml += '<div class="carousel-inner">';
+            data.forEach(function (foto, index) {
+                galleryHtml += `<div class="carousel-item ${index === 0 ? 'active' : ''}">`
+                    + `<a href="{{ asset('storage/uploads/${foto}') }}" data-toggle="lightbox">`
+                    + `<img src="{{ asset('storage/uploads/${foto}') }}" class="d-block w-100" style="height: auto;">`
+                    + `</a>`
+                    + `</div>`;
+            });
+            galleryHtml += '</div>';
+
+            // Controls
+            galleryHtml += `<a class="carousel-control-prev" href="#carousel-${row.id}" role="button" data-slide="prev">`
+                + `<span class="carousel-control-prev-icon" aria-hidden="true"></span>`
+                + `<span class="sr-only">Previous</span>`
+                + `</a>`
+                + `<a class="carousel-control-next" href="#carousel-${row.id}" role="button" data-slide="next">`
+                + `<span class="carousel-control-next-icon" aria-hidden="true"></span>`
+                + `<span class="sr-only">Next</span>`
+                + `</a>`;
+
+            galleryHtml += '</div>'; // Close carousel div
+
+            return galleryHtml;
+        } else {
+            return '-';
         }
-      },
+    }
+},
       {
                 name: 'video',
                 data: 'video',
